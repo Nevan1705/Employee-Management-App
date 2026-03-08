@@ -1,49 +1,56 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Employee } from '../models/employee.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EmployeeService {
-    private mockEmployees: Employee[] = [
-        { id: 1, name: 'Aarav Sharma', role: 'Developer', department: 'IT', salary: 75000 },
-        { id: 2, name: 'Diya Patel', role: 'Manager', department: 'HR', salary: 85000 },
-        { id: 3, name: 'Vihaan Singh', role: 'Designer', department: 'Marketing', salary: 70000 },
-        { id: 4, name: 'Ananya Gupta', role: 'Developer', department: 'IT', salary: 78000 },
-        { id: 5, name: 'Rohan Kumar', role: 'Analyst', department: 'Finance', salary: 72000 }
-    ];
-
-    private employeesSubject = new BehaviorSubject<Employee[]>(this.mockEmployees);
+    private apiUrl = 'assets/data/employees.json';
+    private employeesSubject = new BehaviorSubject<Employee[]>([]);
     employees$ = this.employeesSubject.asObservable();
 
-    constructor() { }
+    constructor(private http: HttpClient) {
+        this.loadInitialData();
+    }
+
+    private loadInitialData(): void {
+        this.http.get<Employee[]>(this.apiUrl).subscribe(data => {
+            this.employeesSubject.next(data);
+        });
+    }
 
     getEmployees(): Observable<Employee[]> {
         return this.employees$;
     }
 
     getEmployeeById(id: number): Observable<Employee | undefined> {
-        const employee = this.mockEmployees.find(e => e.id === id);
-        return of(employee);
+        return this.employees$.pipe(
+            map(employees => employees.find(e => e.id === id))
+        );
     }
 
     addEmployee(employee: Employee): void {
-        employee.id = this.mockEmployees.length > 0 ? Math.max(...this.mockEmployees.map(e => e.id)) + 1 : 1;
-        this.mockEmployees.push(employee);
-        this.employeesSubject.next([...this.mockEmployees]);
+        const currentEmployees = this.employeesSubject.value;
+        const nextId = currentEmployees.length > 0
+            ? Math.max(...currentEmployees.map(e => e.id)) + 1
+            : 1;
+        const newEmployee = { ...employee, id: nextId };
+        this.employeesSubject.next([...currentEmployees, newEmployee]);
     }
 
     updateEmployee(updatedEmployee: Employee): void {
-        const index = this.mockEmployees.findIndex(e => e.id === updatedEmployee.id);
-        if (index !== -1) {
-            this.mockEmployees[index] = updatedEmployee;
-            this.employeesSubject.next([...this.mockEmployees]);
-        }
+        const currentEmployees = this.employeesSubject.value;
+        const updatedEmployees = currentEmployees.map(e =>
+            e.id === updatedEmployee.id ? { ...updatedEmployee } : e
+        );
+        this.employeesSubject.next(updatedEmployees);
     }
 
     deleteEmployee(id: number): void {
-        this.mockEmployees = this.mockEmployees.filter(e => e.id !== id);
-        this.employeesSubject.next([...this.mockEmployees]);
+        const currentEmployees = this.employeesSubject.value;
+        const updatedEmployees = currentEmployees.filter(e => e.id !== id);
+        this.employeesSubject.next(updatedEmployees);
     }
 }

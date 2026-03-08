@@ -1,10 +1,32 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from './components/login/login.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/employees', pathMatch: 'full' },
-    { path: 'employees', component: EmployeeListComponent },
-    { path: 'employee/add', component: EmployeeDetailComponent },
-    { path: 'employee/edit/:id', component: EmployeeDetailComponent }
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: 'login', component: LoginComponent },
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'employees',
+        component: EmployeeListComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'employee/add',
+        component: EmployeeDetailComponent,
+        canActivate: [authGuard]
+    },
+    {
+        path: 'employee/edit/:id',
+        component: EmployeeDetailComponent,
+        canActivate: [authGuard]
+    },
+    { path: '**', redirectTo: '/login' }
 ];

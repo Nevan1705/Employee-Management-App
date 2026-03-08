@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "Aarav Sharma",
+        "email": "aarav.sharma@example.com",
+        "role": "Developer",
+        "department": "IT",
+        "salary": 75000
+    },
+    {
+        "id": 2,
+        "name": "Diya Patel",
+        "email": "diya.patel@example.com",
+        "role": "Manager",
+        "department": "HR",
+        "salary": 85000
+    },
+    {
+        "id": 3,
+        "name": "Vihaan Singh",
+        "email": "vihaan.singh@example.com",
+        "role": "Designer",
+        "department": "Marketing",
+        "salary": 70000
+    },
+    {
+        "id": 4,
+        "name": "Ananya Gupta",
+        "email": "ananya.gupta@example.com",
+        "role": "Developer",
+        "department": "IT",
+        "salary": 78000
+    },
+    {
+        "id": 5,
+        "name": "Rohan Kumar",
+        "email": "rohan.kumar@example.com",
+        "role": "Analyst",
+        "department": "Finance",
+        "salary": 72000
+    }
+]

@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 import { EmployeeService } from '../../services/employee.service';
 import { Employee } from '../../models/employee.model';
 
@@ -19,6 +21,8 @@ import { Employee } from '../../models/employee.model';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatSelectModule,
+    MatIconModule,
     RouterLink
   ],
   templateUrl: './employee-detail.component.html',
@@ -28,6 +32,7 @@ export class EmployeeDetailComponent implements OnInit {
   employeeForm: FormGroup;
   isEditMode = false;
   employeeId: number | null = null;
+  departments: string[] = ['IT', 'HR', 'Marketing', 'Finance', 'Operations'];
 
   constructor(
     private fb: FormBuilder,
@@ -36,10 +41,11 @@ export class EmployeeDetailComponent implements OnInit {
     private router: Router
   ) {
     this.employeeForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       role: ['', Validators.required],
       department: ['', Validators.required],
-      salary: [0, [Validators.required, Validators.min(0)]]
+      salary: [0, [Validators.required, Validators.min(10000), Validators.max(200000)]]
     });
   }
 
@@ -65,7 +71,7 @@ export class EmployeeDetailComponent implements OnInit {
   onSubmit(): void {
     if (this.employeeForm.valid) {
       const employeeData: Employee = {
-        id: this.employeeId ? this.employeeId : 0, // ID will be handled by service for new
+        id: this.employeeId ? this.employeeId : 0,
         ...this.employeeForm.value
       };
 

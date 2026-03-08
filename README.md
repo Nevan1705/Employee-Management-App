@@ -1,27 +1,49 @@
-# EmployeeDashboard
+# Employee Management App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+A modern Angular application for managing employee data with a premium UI using Angular Material.
 
-## Development server
+## Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Services & Routing**: centralized `EmployeeService` with `HttpClient` and `BehaviorSubject`. Dynamic routing with `AuthGuard`.
+- **Pipes & Directives**:
+  - `DepartmentFilterPipe`: Filter employees by department.
+  - `HighlightSalaryDirective`: Automatically highlight high-earners (> 80,000 INR).
+  - Built-in Currency and Date pipes.
+- **Reactive Forms**: Robust validation for employee creation/editing, including email regex and range checks.
+- **Material UI**: Implementation of `MatTable`, `MatDialog`, `MatCard`, `MatToolbar`, and more.
+- **HTTP Interceptor**: Logging for all API requests.
 
-## Code scaffolding
+## Architecture
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```mermaid
+graph TD
+    App[App Component] --> Navbar[Navbar Component]
+    App --> Router[Angular Router]
+    Router --> Home[Home Component]
+    Router --> List[Employee List Component]
+    Router --> Detail[Employee Detail Component]
+    List --> Service[Employee Service]
+    Detail --> Service
+    Service --> JSON[(employees.json)]
+    List --> Pipe[Department Filter Pipe]
+    List --> Directive[Highlight Salary Directive]
+    List --> Dialog[Delete Confirm Dialog]
+```
 
-## Build
+## Setup Instructions
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-## Running unit tests
+2. **Run Locally**:
+   ```bash
+   npm run start
+   ```
+   The app will be available at `http://localhost:4200`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+3. **Build**:
+   ```bash
+   npm run build
+   ```
